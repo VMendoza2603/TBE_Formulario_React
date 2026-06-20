@@ -6,6 +6,7 @@ function Form() {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const validators = {
     name: (v) => {
@@ -59,6 +60,7 @@ function Form() {
     setErrors(newErrors);
     const isValid = Object.values(newErrors).every((err) => err === '');
     if (isValid) {
+      setShowModal(true);
       setTouched({});
       setForm({ name: '', email: '', password: '', age: '' });
       setSubmitted(false);
@@ -143,10 +145,17 @@ function Form() {
             Enviar
           </button>
 
-          {submitted && Object.values(errors).every((e) => e === '') && (
-            <p className="form-footer success">¡Formulario enviado con éxito!</p>
-          )}
         </form>
+
+        {showModal && (
+          <div className="modal-overlay" onClick={() => setShowModal(false)}>
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
+              <h2>¡Enviado!</h2>
+              <p>Tus datos fueron registrados correctamente.</p>
+              <button onClick={() => setShowModal(false)}>Cerrar</button>
+            </div>
+          </div>
+        )}
       </section>
     </main>
   );
